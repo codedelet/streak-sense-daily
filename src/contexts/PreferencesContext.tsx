@@ -1,4 +1,3 @@
-
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { UserPreferences, MotivationalQuote } from '@/types';
 import { useAuth } from './AuthContext';
@@ -98,7 +97,12 @@ export const PreferencesProvider: React.FC<{ children: React.ReactNode }> = ({ c
   // Set daily quote based on today's date
   useEffect(() => {
     const today = new Date();
-    const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / 1000 / 60 / 60 / 24);
+    // Calculate day of the year (1-366)
+    const start = new Date(today.getFullYear(), 0, 0);
+    const diff = today.getTime() - start.getTime();
+    const oneDay = 1000 * 60 * 60 * 24;
+    const dayOfYear = Math.floor(diff / oneDay);
+    
     const quoteIndex = dayOfYear % MOTIVATIONAL_QUOTES.length;
     
     setDailyQuote(MOTIVATIONAL_QUOTES[quoteIndex]);
